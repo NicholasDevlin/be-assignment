@@ -1,0 +1,27 @@
+datasource db {
+  // could be postgresql or mysql
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+ 
+generator db {
+  provider = "go run github.com/steebchen/prisma-client-go"
+}
+ 
+model Post {
+  id        String   @default(cuid()) @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title     String
+  published Boolean
+  desc      String?
+}
+
+model User {
+  id        String   @default(cuid()) @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String
+  email     String
+  password  String
+}
