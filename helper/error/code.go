@@ -8,6 +8,14 @@ func GetErrorCode(err error) int {
 		return http.StatusNotFound
 	case ERR_BAD_REQUEST:
 		return http.StatusBadRequest
+	case ERR_BCRYPT_PASSWORD:
+		return http.StatusInternalServerError
+	case ERR_TOKEN:
+		return http.StatusInternalServerError
+	case ERR_WRONG_PASSWORD:
+		return http.StatusBadRequest
+	case ERR_REGISTER:
+		return http.StatusInternalServerError
 	default:
 		return http.StatusInternalServerError
 	}

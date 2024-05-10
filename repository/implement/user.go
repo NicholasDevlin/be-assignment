@@ -1,6 +1,7 @@
 package repositoryimplement
 
 import (
+	"bank/helper"
 	errors "bank/helper/error"
 	"bank/model"
 	"bank/prisma/db"
@@ -10,6 +11,30 @@ import (
 
 type UserRepositoryImpl struct {
 	DB *db.PrismaClient
+}
+
+// Login implements repository.UserRepository.
+func (u *UserRepositoryImpl) Login(ctx context.Context, input model.User) (model.User, error) {
+	user, err := u.DB.User.FindFirst(db.User.Email.Equals(input.Email)).Exec(ctx)
+	if err != nil {
+		errors.ErrorPanic(err)
+		return model.User{}, err
+	}
+
+	if user == nil {
+		return model.User{}, errors.ERR_USER_NOT_FOUND
+	}
+
+	err = helper.CheckPassword(input.Password, user.Password)
+	if err != nil {
+		return model.User{}, errors.ERR_WRONG_PASSWORD
+	}
+
+	return model.User{
+		Id:    user.ID,
+		Name:  user.Name,
+		Email: user.Email,
+	}, nil
 }
 
 // Delete implements repository.UserRepository.

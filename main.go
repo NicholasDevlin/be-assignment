@@ -14,6 +14,5 @@ func main() {
 	db := config.ConnectDB()
 	defer db.Disconnect()
 	routes.Route(r, db)
-
 	r.Run(fmt.Sprintf(":%s", os.Getenv("PORT")))
 }

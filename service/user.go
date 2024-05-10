@@ -7,6 +7,7 @@ import (
 
 type UserService interface {
 	Create(ctx context.Context, input user.UserRequest) (user.UserResponse, error)
+	Login(ctx context.Context, input user.UserRequest) (user.UserResponse, error)
 	Update(ctx context.Context, input user.UserRequest) (user.UserResponse, error)
 	Delete(ctx context.Context, userId string) error
 	FindAll(ctx context.Context) []user.UserResponse

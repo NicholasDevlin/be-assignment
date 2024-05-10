@@ -28,5 +28,35 @@ func (c *UserController) Create(ctx *gin.Context) {
 		helper.NewErrorResponse(ctx, err)
 		return
 	}
+
+	token, err := helper.CreateToken(res.Id, res.Name)
+	if err != nil {
+		helper.NewErrorResponse(ctx, errors.ERR_TOKEN)
+		return
+	}
+	res.Token = token
+
+	helper.NewSuccessResponse(ctx, res)
+}
+
+func (c *UserController) Login(ctx *gin.Context) {
+	var user user.UserRequest
+	if err := ctx.ShouldBindBodyWithJSON(&user); err != nil {
+		helper.NewErrorResponse(ctx, errors.ERR_BAD_REQUEST)
+		return
+	}
+	res, err := c.UserService.Login(ctx, user)
+	if err != nil {
+		helper.NewErrorResponse(ctx, err)
+		return
+	}
+
+	token, err := helper.CreateToken(res.Id, res.Name)
+	if err != nil {
+		helper.NewErrorResponse(ctx, errors.ERR_TOKEN)
+		return
+	}
+	res.Token = token
+
 	helper.NewSuccessResponse(ctx, res)
 }

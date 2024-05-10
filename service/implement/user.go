@@ -2,6 +2,7 @@ package serviceimplement
 
 import (
 	"bank/dto/user"
+	"bank/helper"
 	errors "bank/helper/error"
 	"bank/model"
 	"bank/repository"
@@ -13,18 +14,46 @@ type UserServiceImpl struct {
 	UserRepository repository.UserRepository
 }
 
-// Create implements service.UserService.
-func (u *UserServiceImpl) Create(ctx context.Context, input user.UserRequest) (user.UserResponse, error) {
+// Login implements service.UserService.
+func (u *UserServiceImpl) Login(ctx context.Context, input user.UserRequest) (user.UserResponse, error) {
 	userData := model.User{
-		Name:     input.Name,
 		Email:    input.Email,
 		Password: input.Password,
 	}
-	u.UserRepository.Save(ctx, userData)
+
+	res, err := u.UserRepository.Login(ctx, userData)
+	if err != nil {
+		return user.UserResponse{}, err
+	}
+
 	return user.UserResponse{
-		Id: userData.Id,
-		Email: userData.Email,
-		Name: userData.Name,
+		Id:    res.Id,
+		Email: res.Email,
+		Name:  res.Name,
+	}, nil
+}
+
+// Create implements service.UserService.
+func (u *UserServiceImpl) Create(ctx context.Context, input user.UserRequest) (user.UserResponse, error) {
+	hashPass, err := helper.HashPassword(input.Password)
+	if err != nil {
+		return user.UserResponse{}, errors.ERR_BCRYPT_PASSWORD
+	}
+	userData := model.User{
+		Name:     input.Name,
+		Email:    input.Email,
+		Password: hashPass,
+	}
+
+	res, err := u.UserRepository.Save(ctx, userData)
+	if err != nil {
+		return user.UserResponse{}, errors.ERR_REGISTER
+	}
+
+	return user.UserResponse{
+		Id:    res.Id,
+		Email: res.Email,
+		Name:  res.Name,
 	}, nil
 }
 
@@ -73,7 +102,7 @@ func (u *UserServiceImpl) Update(ctx context.Context, input user.UserRequest) (u
 	return user.UserResponse{
 		Id:    userData.Id,
 		Email: userData.Email,
-		Name: userData.Name,
+		Name:  userData.Name,
 	}, nil
 }
 

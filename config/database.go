@@ -11,11 +11,6 @@ func ConnectDB() (*db.PrismaClient) {
 	if err := client.Prisma.Connect(); err != nil {
 		return nil
 	}
-	defer func() {
-		if err := client.Prisma.Disconnect(); err != nil {
-			panic(err)
-		}
-	}()
 	log.Info("Connected to database")
 	return client
 }
