@@ -1,21 +1,21 @@
 package helper
 
 import (
-	"bank/helper/errors"
+	errors "bank/helper/error"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 type BaseResponse struct {
-	Success  bool        `json:"success"`
+	Success bool        `json:"success"`
 	Message string      `json:"message"`
 	Data    interface{} `json:"data"`
 }
 
 func NewSuccessResponse(c *gin.Context, data interface{}) {
 	c.IndentedJSON(http.StatusOK, BaseResponse{
-		Success:  true,
+		Success: true,
 		Message: "Success",
 		Data:    data,
 	})

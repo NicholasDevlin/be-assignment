@@ -1,7 +1,7 @@
 package repositoryimplement
 
 import (
-	"bank/helper/errors"
+	errors "bank/helper/error"
 	"bank/model"
 	"bank/prisma/db"
 	"bank/repository"
@@ -70,7 +70,6 @@ func (u *UserRepositoryImpl) Save(ctx context.Context, user model.User) (model.U
 		errors.ErrorPanic(err)
 		return model.User{}, err
 	}
-
 	return model.User{
 		Id:    result.ID,
 		Name:  result.Name,

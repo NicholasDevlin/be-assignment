@@ -3,7 +3,7 @@ package controller
 import (
 	"bank/dto/user"
 	"bank/helper"
-	"bank/helper/errors"
+	errors "bank/helper/error"
 	"bank/service"
 
 	"github.com/gin-gonic/gin"

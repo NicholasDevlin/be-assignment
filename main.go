@@ -2,6 +2,7 @@ package main
 
 import (
 	"bank/config"
+	"bank/routes"
 	"fmt"
 	"os"
 
@@ -12,6 +13,7 @@ func main() {
 	r := gin.Default()
 	db := config.ConnectDB()
 	defer db.Disconnect()
+	routes.Route(r, db)
 
-	r.Run(fmt.Sprintf(":%d", os.Getenv("PORT")))
+	r.Run(fmt.Sprintf(":%s", os.Getenv("PORT")))
 }

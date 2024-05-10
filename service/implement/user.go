@@ -2,7 +2,7 @@ package serviceimplement
 
 import (
 	"bank/dto/user"
-	"bank/helper/errors"
+	errors "bank/helper/error"
 	"bank/model"
 	"bank/repository"
 	"bank/service"
